@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace CourseLibrary.API.Controllers
 {
     [ApiController]
-    [Route("api")]
-
+    [Route("api/authors")]
     public class AuthorsController : ControllerBase
     {
         private readonly ICourseLibraryRepository _courseLibraryRepository;
@@ -21,12 +20,26 @@ namespace CourseLibrary.API.Controllers
                 throw new ArgumentNullException(nameof(courseLibraryRepository));
         }
 
-        [HttpGet("authors")]
-        [Produces("application/json", Type = typeof(IEnumerable<Author>))]
+        // Get a list of ALL authors
+        [HttpGet()]
         public IActionResult GetAuthors()
         {
             var authorsFromRepo = _courseLibraryRepository.GetAuthors();
-            return new JsonResult(authorsFromRepo);
+            return Ok(authorsFromRepo);
+        }
+
+        // Get a SINGLE author
+        [HttpGet("{authorId}")]
+        public IActionResult GetAuthor(Guid authorId)
+        {
+            var author = _courseLibraryRepository.GetAuthor(authorId);
+
+            if (author == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(author);
         }
     }
 }
