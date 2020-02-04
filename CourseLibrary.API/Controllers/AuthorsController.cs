@@ -25,13 +25,12 @@ namespace CourseLibrary.API.Controllers
 
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
-
         }
 
         [HttpGet()]
-        public ActionResult<IEnumerable<AuthorDto>> GetAuthors()
+        public ActionResult<IEnumerable<AuthorDto>> GetAuthors(string mainCategory)
         {
-            var authorsFromRepo = _courseLibraryRepository.GetAuthors();
+            var authorsFromRepo = _courseLibraryRepository.GetAuthors(mainCategory);
 
             return Ok(_mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo));
         }
